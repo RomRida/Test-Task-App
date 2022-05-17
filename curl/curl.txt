@@ -1,0 +1,29 @@
+//Login
+curl -X POST \
+  'localhost:8081/api/v1/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "name": "FirstUser",
+    "password": "password"
+}'
+
+//History lookup
+curl -X POST \
+  'localhost:8081/api/v1/messages' \
+  --header 'Authorization: Bearer_ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjUyNzEwODk1LCJleHAiOjE2NTI3OTcyOTV9.mnGcWRtLivNgPay7ilNuKVIHcKp_ii2wcJMjsmQ9uVg' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "name": "FirstUser",
+    "message": "history 10"
+}'
+
+//Create new message
+curl -X POST \
+  'localhost:8081/api/v1/messages' \
+  --header 'Authorization: Bearer_ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjUyNzEwODk1LCJleHAiOjE2NTI3OTcyOTV9.mnGcWRtLivNgPay7ilNuKVIHcKp_ii2wcJMjsmQ9uVg' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "name": "FirstUser",
+    "message": "history book"
+}'
+

@@ -48,7 +48,7 @@ public class MessagesController {
         //check if needed to return message history or save new message
         if (messageSplit.length == 2 && messageSplit[0].equals("history") && isNumeric(messageSplit[1])) {
             //assigning given value to Pageable
-            int amountOfRecords = (int) Double.parseDouble(messageSplit[1].replace(",", "."));
+            int amountOfRecords = Math.abs((int) Double.parseDouble(messageSplit[1].replace(",", ".")));
             Pageable pageable = PageRequest.of(0, amountOfRecords);
             //return list of messages that belongs to given user
             return ResponseEntity.ok(messageService

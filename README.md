@@ -41,7 +41,25 @@ This is an app with couple endpoints (both of them have only POST method exposed
 
 For local app launch from your IDE of choice you would need Docker and JDK 11 or above.
 
-1) First navigate to `docker.local` directory from terminal and from there launch docker-compose up command;
-2) 
+You have Two main ways to lunch this app:
 
+1) First navigate to `\docker\local\ ` directory located inside root of the project. 
+   From terminal launch `docker-compose up` command; 
+   Postgres Database and App will lunch after that, and you can start freely using them 
 
+2) If you choose to run the application from the IDE, you will either need to define environment variables (listed below),
+   or just run the app with a `local` spring profile where all the environment variables are already defined 
+  (Already defined verifiable in local profile tuned to work with postgresql database lunched from Docker compose, 
+   you may use your own local database, but then you may need to change some variables)
+    ```table
+   | Environmental variable |            Definition           |
+   |:----------------------:|:-------------------------------:|
+   | POSTGRES_HOST          | define postgresql host          |
+   | POSTGRES_PORT          | define postgresql port          |
+   | POSTGRES_DATABASE      | define postgresql database name |
+   | POSTGRES_USER          | define postgresql user          |
+   | POSTGRES_PASSWORD      | define postgresql password      |
+   | JWT_SECRET             | define jwt secret               |
+    ```
+* You also may find helpful curl commands located in `\curl\ ` repository inside curl.txt file, 
+  use theme to quickly test main functionality

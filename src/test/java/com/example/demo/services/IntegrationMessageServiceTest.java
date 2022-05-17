@@ -33,7 +33,7 @@ class IntegrationMessageServiceTest extends AbstractIT {
         //given
         AppUser savedUser = new AppUser(1L, "user", "password", new HashSet<>());
         userRepository.save(savedUser);
-        Message savedMessage = new Message(1L, savedUser, "my first message");
+        Message savedMessage = new Message(1L, savedUser, "history book");
         messageRepository.save(savedMessage);
         Pageable pageable = PageRequest.of(0, 1);
         //when

@@ -9,3 +9,18 @@ services:
       POSTGRES_USER: local
       POSTGRES_PASSWORD: local
       POSTGRES_DB: test
+
+  app:
+    image: 8cb480b6a99c
+    container_name: myApp
+    ports:
+      - "8083:8083"
+    environment:
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: local
+      POSTGRES_DATABASE: test
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      JWT_SECRET: javatest
+    depends_on:
+      - db
