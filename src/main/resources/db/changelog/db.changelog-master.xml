@@ -43,4 +43,8 @@
     <changeSet id="2" author="RidaR">
         <sqlFile dbms="postgresql" path="db/changelog/inserts.sql"/>
     </changeSet>
+
+    <changeSet id="3" author="RidaR">
+        <addUniqueConstraint tableName="users" columnNames="username"/>
+    </changeSet>
 </databaseChangeLog>

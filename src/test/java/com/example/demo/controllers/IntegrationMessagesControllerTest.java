@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,17 +33,17 @@ class IntegrationMessagesControllerTest extends AbstractIT {
 
     @BeforeEach
     void init() {
-        AppUser appUser = userRepository.save(new AppUser(1L,
-                "user",
+        AppUser appUser = userRepository.save(new AppUser(3L,
+                "mock",
                 "$2a$07$kqcWYsYZjQJzw4DAMinsmOHdtmE9G5glTC8LmKBJfCy7Y2E3Fl9om",
                 new HashSet<>()));
-        messageRepository.save(new Message(1L, appUser, "history book"));
+        messageRepository.save(new Message(null, appUser, "mock message"));
     }
 
     @Test
     void SuccessfulPostCall() throws Exception {
         //given
-        String messageJson = "{\"name\":\"user\",\"message\":\"history 1\"}";
+        String messageJson = "{\"name\":\"mock\",\"message\":\"history 1\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,19 +54,19 @@ class IntegrationMessagesControllerTest extends AbstractIT {
     @Test
     void SuccessfulMessageHistoryCall() throws Exception {
         //given
-        String messageJson = "{\"name\":\"user\",\"message\":\"history 1\"}";
+        String messageJson = "{\"name\":\"mock\",\"message\":\"history 1\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(messageJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"name\":\"user\",\"message\":\"history book\"}]"));
+                .andExpect(content().json("[{\"name\":\"mock\",\"message\":\"mock message\"}]"));
     }
 
     @Test
     void SuccessfulSaveNewMessageCall() throws Exception {
         //given
-        String messageJson = "{\"name\":\"user\",\"message\":\"history book\"}";
+        String messageJson = "{\"name\":\"FirstUser\",\"message\":\"new mock message\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +78,7 @@ class IntegrationMessagesControllerTest extends AbstractIT {
     @Test
     void unsuccessfulPostCall() throws Exception {
         //given
-        String messageJson = "{\"name\":\"usr\",\"message\":\"history book\"}";
+        String messageJson = "{\"name\":\"usr\",\"message\":\"mock message\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
                         .contentType(MediaType.APPLICATION_JSON)

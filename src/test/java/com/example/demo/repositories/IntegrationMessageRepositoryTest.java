@@ -23,9 +23,9 @@ class IntegrationMessageRepositoryTest extends AbstractIT {
     @Test
     void testFindByUserUsername() {
         //given
-        AppUser savedUser = new AppUser(1L, "user", "password", new HashSet<>());
+        AppUser savedUser = new AppUser(null, "mock", "mock", new HashSet<>());
         userRepository.save(savedUser);
-        Message savedMessage = new Message(1L, savedUser, "history book");
+        Message savedMessage = new Message(1L, savedUser, "mock message");
         messageRepository.save(savedMessage);
         Pageable pageable = PageRequest.of(0, 1);
         //when
