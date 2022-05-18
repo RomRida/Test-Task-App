@@ -20,6 +20,7 @@ public class UserService {
 
     @Cacheable("users")
     public AppUser findByUsername(String username) {
+        //if user not found throw custom exception
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserDoesNotExistException("User with username: " + username + " does not exist"));
     }

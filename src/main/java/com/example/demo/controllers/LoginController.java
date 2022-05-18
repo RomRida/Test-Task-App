@@ -33,7 +33,9 @@ public class LoginController {
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getName();
+            //authenticate user, if user doesn't exist, throw authentication exception
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            //after authentication return token to user
             String token = jwtTokenProvider.createToken(username);
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
