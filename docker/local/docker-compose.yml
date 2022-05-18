@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: test
 
   app:
-    image: romrida/skilltestapp:0.0.2
+    image: romrida/skilltestapp:0.0.3
     container_name: myApp
     ports:
       - "8083:8083"
