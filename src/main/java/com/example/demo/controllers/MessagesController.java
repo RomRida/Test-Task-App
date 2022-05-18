@@ -39,6 +39,11 @@ public class MessagesController {
         return true;
     }
 
+    //converts any number to positive int number
+    public static int convertToPositiveInt(String strNum) {
+        return (int) Math.abs(Double.parseDouble(strNum.replace(",", ".")));
+    }
+
     @PostMapping
     public ResponseEntity saveNewMessage(@RequestBody MessageDto messageDto) {
         AppUser user = userService.findByUsername(messageDto.getName());
@@ -48,7 +53,7 @@ public class MessagesController {
         //check if needed to return message history or save new message
         if (messageSplit.length == 2 && messageSplit[0].equals("history") && isNumeric(messageSplit[1])) {
             //assigning given value to Pageable
-            int amountOfRecords = Math.abs((int) Double.parseDouble(messageSplit[1].replace(",", ".")));
+            int amountOfRecords = convertToPositiveInt(messageSplit[1]);
             Pageable pageable = PageRequest.of(0, amountOfRecords);
             //return list of messages that belongs to given user
             return ResponseEntity.ok(messageService
