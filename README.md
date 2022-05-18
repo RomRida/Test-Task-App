@@ -44,7 +44,7 @@ For local app launch from your IDE of choice you would need Docker and JDK 11 or
 You have two main ways to launch this app:
 
 1) First navigate to `\docker\local\ ` directory located inside root of the project.
-   Use `docker pull romrida/skilltestapp:0.0.2` command to pull image of this app from docker hub; 
+   Use `docker pull romrida/skilltestapp:0.0.3` command to pull image of this app from docker hub; 
    From terminal launch `docker-compose up` command; 
    Postgres Database and App will launch after that, and you can start freely using them 
 
