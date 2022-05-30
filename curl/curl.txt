@@ -2,8 +2,8 @@
 curl -X POST "localhost:8083/api/v1/login" --header "Content-Type: application/json" --data-raw "{\"name\": \"FirstUser\",\"password\": \"password\"}"
 
 //History lookup
-curl -X POST "localhost:8083/api/v1/messages" --header "Authorization: Bearer_ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdFVzZXIiLCJpYXQiOjE2NTI4MjU0NDUsImV4cCI6MTY1MjkxMTg0NX0.VqIwYcS4h_K8QgR9vhjjOnaTpzQ9itsp6Z_6a5ponZA" --header "Content-Type: application/json" --data-raw "{\"name\": \"FirstUser\",\"message\": \"history 5\"}"
+curl -X POST "localhost:8083/api/v1/messages" --header "Authorization: Bearer_ *token goes here*" --header "Content-Type: application/json" --data-raw "{\"name\": \"FirstUser\",\"message\": \"history 50\"}"
 
 //Create new message
-curl -X POST "localhost:8083/api/v1/messages" --header "Authorization: Bearer_ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdFVzZXIiLCJpYXQiOjE2NTI4MjU0NDUsImV4cCI6MTY1MjkxMTg0NX0.VqIwYcS4h_K8QgR9vhjjOnaTpzQ9itsp6Z_6a5ponZA" --header "Content-Type: application/json" --data-raw "{\"name\": \"FirstUser\",\"message\": \"history book\"}"
+curl -X POST "localhost:8083/api/v1/messages" --header "Authorization: Bearer_ *token goes here*" --header "Content-Type: application/json" --data-raw "{\"name\": \"FirstUser\",\"message\": \"history book\"}"
 
