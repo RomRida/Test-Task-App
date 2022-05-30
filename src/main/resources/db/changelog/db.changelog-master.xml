@@ -47,4 +47,5 @@
     <changeSet id="3" author="RidaR">
         <addUniqueConstraint tableName="users" columnNames="username"/>
     </changeSet>
+
 </databaseChangeLog>
