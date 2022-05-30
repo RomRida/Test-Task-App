@@ -2,16 +2,19 @@ package com.example.demo.controllers;
 
 import com.example.demo.config.test.AbstractIT;
 import com.example.demo.dto.MessageDto;
+import com.example.demo.exceptions.UserDoesNotExistException;
 import com.example.demo.models.AppUser;
 import com.example.demo.models.Message;
 import com.example.demo.repositories.MessageRepository;
 import com.example.demo.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -28,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @WithMockUser
-@TestInstance(Lifecycle.PER_CLASS)
-@Transactional
 class IntegrationMessagesControllerTest extends AbstractIT {
 
     @Autowired
@@ -43,7 +44,7 @@ class IntegrationMessagesControllerTest extends AbstractIT {
     @Autowired
     MessagesController messagesController;
 
-    @BeforeAll
+    @BeforeEach
     void init() {
         AppUser appUser = userRepository.save(new AppUser(3L,
                 "mock",
@@ -90,10 +91,9 @@ class IntegrationMessagesControllerTest extends AbstractIT {
     @Test
     void SuccessfulSavedMessage() {
         //given
-        MessageDto existingMessage = new MessageDto("mock", "mock message");
-        MessageDto newUserMessageDto = new MessageDto("mock", "new mock message");
-        MessageDto userMessageToRetractHistory = new MessageDto("mock", "history 10");
-        List<MessageDto> expectedList = List.of(existingMessage, newUserMessageDto);
+        MessageDto newUserMessageDto = new MessageDto("FirstUser", "new mock message");
+        MessageDto userMessageToRetractHistory = new MessageDto("FirstUser", "history 100");
+        List<Message> expectedList = messageRepository.findByUserUsername("FirstUser", PageRequest.of(0, 100));
         //when
         ResponseEntity<MessageDto> response = messagesController.saveNewMessage(newUserMessageDto);
         ResponseEntity<List<MessageDto>> historyResponse = messagesController.saveNewMessage(userMessageToRetractHistory);
@@ -101,8 +101,7 @@ class IntegrationMessagesControllerTest extends AbstractIT {
         then(response.getBody().getName()).isEqualTo(newUserMessageDto.getName());
         then(response.getBody().getMessage()).isEqualTo(newUserMessageDto.getMessage());
 
-        then(historyResponse.getBody().size()).isEqualTo(expectedList.size());
-        then(historyResponse.getBody().contains(existingMessage)).isTrue();
+        then(historyResponse.getBody().size()).isEqualTo(expectedList.size() + 1);
         then(historyResponse.getBody().contains(newUserMessageDto)).isTrue();
     }
 

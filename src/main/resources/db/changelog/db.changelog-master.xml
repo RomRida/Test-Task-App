@@ -48,14 +48,4 @@
         <addUniqueConstraint tableName="users" columnNames="username"/>
     </changeSet>
 
-    <changeSet id="4" author="RidaR">
-        <dropForeignKeyConstraint baseTableName="messages" constraintName="fk_users_messages"/>
-        <addForeignKeyConstraint baseTableName="messages"
-                                 baseColumnNames="user_id"
-                                 constraintName="fk_users_messages"
-                                 referencedTableName="users"
-                                 referencedColumnNames="user_id"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"/>
-    </changeSet>
 </databaseChangeLog>
