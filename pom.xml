@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.rorida</groupId>
 	<artifactId>task</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.4</version>
 	<name>task</name>
 	<packaging>jar</packaging>
 	<description>Task project for Skill Test</description>
