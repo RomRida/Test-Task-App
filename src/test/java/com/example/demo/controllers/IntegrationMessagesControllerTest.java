@@ -2,16 +2,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.config.test.AbstractIT;
 import com.example.demo.dto.MessageDto;
-import com.example.demo.exceptions.UserDoesNotExistException;
 import com.example.demo.models.AppUser;
 import com.example.demo.models.Message;
 import com.example.demo.repositories.MessageRepository;
 import com.example.demo.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
