@@ -63,4 +63,6 @@ You have two main ways to launch this app:
    | JWT_SECRET             | define jwt secret               |
     ```
 * You also may find helpful curl commands located in `\curl\ ` repository inside curl.txt file, 
-  use theme to quickly test main functionality
+  use theme to quickly test main functionality. First command lets you acquire token, witch you 
+  need to insert in two commands below in place of `*token goes here*`
+  
