@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,67 +29,72 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 class IntegrationMessagesControllerTest extends AbstractIT {
 
+    private static final String PRE_SAVED_MESSAGE = "{\"name\":\"mock\",\"message\":\"mock message\"}";
+    private static final String HISTORY_LOOK_UP_MESSAGE = "{\"name\":\"mock\",\"message\":\"history 10\"}";
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     UserRepository userRepository;
     @Autowired
     MessageRepository messageRepository;
-
     @Autowired
     MessagesController messagesController;
+    @Autowired
+    private CacheManager cacheManager;
 
     @BeforeEach
     void init() {
-        AppUser appUser = userRepository.save(new AppUser(3L,
-                "mock",
-                "$2a$07$kqcWYsYZjQJzw4DAMinsmOHdtmE9G5glTC8LmKBJfCy7Y2E3Fl9om",
-                new HashSet<>()));
+        AppUser appUser = userRepository.save(new AppUser(3L, "mock", "$2a$07$kqcWYsYZjQJzw4DAMinsmOHdtmE9G5glTC8LmKBJfCy7Y2E3Fl9om", new HashSet<>()));
         messageRepository.save(new Message(null, appUser, "mock message"));
+        //clear cash after every method. This integration test needs it to work correctly
+        for (String name : cacheManager.getCacheNames()) {
+            cacheManager.getCache(name).clear();
+        }
     }
 
     @Test
     void SuccessfulPostCall() throws Exception {
-        //given
-        String messageJson = "{\"name\":\"mock\",\"message\":\"history 1\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(messageJson))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(HISTORY_LOOK_UP_MESSAGE))
                 .andExpect(status().isOk());
     }
 
     @Test
     void SuccessfulMessageHistoryCall() throws Exception {
-        //given
-        String messageJson = "{\"name\":\"mock\",\"message\":\"history 1\"}";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(messageJson))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(HISTORY_LOOK_UP_MESSAGE))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"name\":\"mock\",\"message\":\"mock message\"}]"));
+                .andExpect(content().json("[" + PRE_SAVED_MESSAGE + "]"));
     }
 
     @Test
     void SuccessfulSaveNewMessageCall() throws Exception {
         //given
-        String messageJson = "{\"name\":\"FirstUser\",\"message\":\"new mock message\"}";
+        String newMessage = "{\"name\":\"mock\",\"message\":\"new mock message\"}";
+        String historyCheckResponse = "[" + PRE_SAVED_MESSAGE + "," + newMessage + "]";
         //when //then
         mockMvc.perform(post("/api/v1/messages")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(messageJson))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newMessage))
                 .andExpect(status().isOk())
-                .andExpect(content().json(messageJson));
+                .andExpect(content().json(newMessage));
+        mockMvc.perform(post("/api/v1/messages")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(HISTORY_LOOK_UP_MESSAGE))
+                .andExpect(status().isOk())
+                .andExpect(content().json(historyCheckResponse));
     }
 
     @Test
     void SuccessfulSavedMessage() {
         //given
-        MessageDto newUserMessageDto = new MessageDto("FirstUser", "new mock message");
-        MessageDto userMessageToRetractHistory = new MessageDto("FirstUser", "history 100");
-        List<Message> expectedList = messageRepository.findByUserUsername("FirstUser", PageRequest.of(0, 100));
+        MessageDto newUserMessageDto = new MessageDto("mock", "new mock message");
+        MessageDto userMessageToRetractHistory = new MessageDto("mock", "history 100");
+        List<Message> expectedList = messageRepository.findByUserUsername("mock", PageRequest.of(0, 100));
         //when
         ResponseEntity<MessageDto> response = messagesController.saveNewMessage(newUserMessageDto);
         ResponseEntity<List<MessageDto>> historyResponse = messagesController.saveNewMessage(userMessageToRetractHistory);
